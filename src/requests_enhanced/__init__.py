@@ -7,6 +7,7 @@ This library extends the requests package with features such as:
 - Improved logging
 - Convenient utility functions
 """
+
 from .sessions import Session
 
 __version__ = "0.1.0"
