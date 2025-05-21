@@ -118,3 +118,4 @@ jobs:
       if: steps.check_token.outputs.token_exists == 'true'
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
+        skip-existing: true
