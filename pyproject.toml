@@ -10,7 +10,7 @@ include = '\.pyi?$'
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
-addopts = "--cov=src/requests_plus --cov-report=term-missing"
+addopts = "--cov=src/requests_enhanced --cov-report=term-missing"
 filterwarnings = [
     "ignore::DeprecationWarning:httpserver.*",
 ]
