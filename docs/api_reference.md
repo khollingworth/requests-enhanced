@@ -1,13 +1,13 @@
 # API Reference
 
-This document provides detailed information about the `requests-plus` API, including classes, methods, and exceptions.
+This document provides detailed information about the `requests-enhanced` API, including classes, methods, and exceptions.
 
 ## Core Components
 
 ### Session
 
 ```python
-from requests_plus import Session
+from requests_enhanced import Session
 ```
 
 #### Constructor
@@ -52,7 +52,7 @@ response = session.get("https://api.example.com/resources")
 ### Utility Functions
 
 ```python
-from requests_plus.utils import json_get, json_post
+from requests_enhanced.utils import json_get, json_post
 ```
 
 #### json_get
@@ -116,7 +116,7 @@ Make a POST request with JSON data and return the JSON response.
 ### Logging Configuration
 
 ```python
-from requests_plus.logging import configure_logger
+from requests_enhanced.logging import configure_logger
 ```
 
 #### configure_logger
@@ -147,24 +147,24 @@ Configure a logger with the specified level, handler, and format.
 
 ```python
 import logging
-from requests_plus.logging import configure_logger
+from requests_enhanced.logging import configure_logger
 
-logger = logging.getLogger("requests_plus")
+logger = logging.getLogger("requests_enhanced")
 configure_logger(logger, level=logging.DEBUG)
 ```
 
 ## Exceptions
 
-### RequestsPlusError
+### RequestsEnhancedError
 
-Base exception for all `requests-plus` errors.
+Base exception for all `requests-enhanced` errors.
 
 ### RequestRetryError
 
 Raised when max retries are exceeded.
 
 ```python
-from requests_plus.exceptions import RequestRetryError
+from requests_enhanced.exceptions import RequestRetryError
 
 try:
     # Make a request
@@ -178,7 +178,7 @@ except RequestRetryError as e:
 Raised when a request times out.
 
 ```python
-from requests_plus.exceptions import RequestTimeoutError
+from requests_enhanced.exceptions import RequestTimeoutError
 
 try:
     # Make a request
