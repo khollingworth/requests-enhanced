@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-05-21
 
 ### Added
-- Initial release of the requests-plus library
+- Initial release of the requests-enhanced library (renamed from requests-plus)
 - Enhanced Session class with automatic retry functionality
 - Configurable timeout settings for all requests
 - Custom exception classes for improved error handling
@@ -16,4 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Utility functions for common request patterns (json_get, json_post)
 - Comprehensive test suite with 94% code coverage
 - Complete documentation with API reference
-- CI/CD pipeline with GitHub Actions
+- Published to PyPI at https://pypi.org/project/requests-enhanced/

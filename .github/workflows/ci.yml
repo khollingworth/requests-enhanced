@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     tags:
-      - 'v*'
+      - 'v*.*.*'
   pull_request:
     branches: [ main ]
 
@@ -80,10 +80,11 @@ jobs:
 
   publish:
     needs: [lint, test, docs]
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: read
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -101,11 +102,15 @@ jobs:
     - name: Check PyPI token
       id: check_token
       # This safely checks if the token exists without causing an error
+      env:
+        # This will be an empty string if the secret doesn't exist
+        PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        if [ -n "${{ secrets.PYPI_API_TOKEN }}" ]; then
+        if [ -n "$PYPI_TOKEN" ]; then
           echo "token_exists=true" >> $GITHUB_OUTPUT
         else
           echo "token_exists=false" >> $GITHUB_OUTPUT
+          echo "::warning::No PyPI API token found in repository secrets. Publishing will be skipped."
         fi
 
     - name: Publish package
