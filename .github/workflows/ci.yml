@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black mypy types-requests
+        pip install -e .
+    - name: Lint with flake8
+      run: |
+        flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+    - name: Check formatting with black
+      run: |
+        black --check src tests
+    - name: Type check with mypy
+      run: |
+        mypy --ignore-missing-imports --disallow-untyped-defs --disallow-incomplete-defs src/
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov pytest-httpserver
+        pip install -e ".[dev]"
+    - name: Test with pytest
+      run: |
+        pytest --cov=src/requests_enhanced --cov-report=xml --cov-report=term-missing
+    - name: Upload coverage to Codecov
+      if: matrix.python-version == '3.10'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install mkdocs mkdocs-material
+        npm install -g markdown-link-check
+    - name: Check docs links
+      run: |
+        # Verify markdown links are not broken
+        find docs -name "*.md" -exec markdown-link-check {} \;
+
+  publish:
+    needs: [lint, test, docs]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    - name: Build package
+      run: |
+        python -m build
+        twine check dist/*
+    - name: Check PyPI token
+      id: check_token
+      # This safely checks if the token exists without causing an error
+      run: |
+        if [ -n "${{ secrets.PYPI_API_TOKEN }}" ]; then
+          echo "token_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "token_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@release/v1
+      if: steps.check_token.outputs.token_exists == 'true'
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
