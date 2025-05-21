@@ -1,6 +1,9 @@
 # Local task tracking
 TASK.md
 
+# PyPI credentials - never commit!
+.pypirc
+
 # Python cache files
 __pycache__/
 *.py[cod]
@@ -30,7 +33,11 @@ htmlcov/
 .nox/
 .hypothesis/
 .pytest_cache/
+.mypy_cache/
 cover/
+
+# Virtual environments
+venv/
 
 # macOS system files
 .DS_Store
