@@ -114,7 +114,7 @@ class Session(requests.Session):
 
         if not method:
             raise ValueError("HTTP method cannot be empty")
-            
+
         # Use the default timeout if not specified in kwargs
         if "timeout" not in kwargs:
             kwargs["timeout"] = self.timeout
@@ -126,7 +126,9 @@ class Session(requests.Session):
             return super().request(method, url, **kwargs)
         except requests.exceptions.Timeout as e:
             # Handle timeout exceptions with our custom error type
-            logger.error(f"Request to {url} timed out after {kwargs.get('timeout')} seconds")
+            logger.error(
+                f"Request to {url} timed out after {kwargs.get('timeout')} seconds"
+            )
             raise RequestTimeoutError(
                 f"Request to {url} timed out", original_exception=e
             )
