@@ -4,7 +4,6 @@ Tests for the HTTP/2 adapter functionality.
 
 import pytest
 from unittest.mock import patch, MagicMock
-import sys
 
 # Conditional imports to handle potential import errors
 try:
@@ -17,7 +16,7 @@ except ImportError:
 # Skip HTTP/2 tests if dependencies are missing
 pytestmark = pytest.mark.skipif(
     not HTTP2_AVAILABLE,
-    reason="HTTP/2 dependencies not available (h2, hyperframe, hpack)"
+    reason="HTTP/2 dependencies not available (h2, hyperframe, hpack)",
 )
 
 

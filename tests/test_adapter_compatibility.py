@@ -4,7 +4,6 @@ Tests for adapter compatibility with different urllib3 versions.
 
 import pytest
 from unittest.mock import patch, Mock
-import sys
 
 # Conditionally import the HTTP/2 adapter
 try:
@@ -17,7 +16,7 @@ except ImportError:
 # Skip all tests in this module if HTTP/2 is not available
 pytestmark = pytest.mark.skipif(
     not HTTP2_AVAILABLE,
-    reason="HTTP/2 dependencies not available (h2, hyperframe, hpack)"
+    reason="HTTP/2 dependencies not available (h2, hyperframe, hpack)",
 )
 
 
