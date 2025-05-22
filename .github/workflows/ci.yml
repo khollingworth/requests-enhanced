@@ -58,8 +58,16 @@ jobs:
       if: matrix.python-version == '3.10'
       uses: codecov/codecov-action@v3
       with:
-        file: ./coverage.xml
+        files: ./coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
+        verbose: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # Add retries for better reliability against rate limits
+      continue-on-error: true
+      timeout-minutes: 4
+      # The action will retry 3 times by default
 
   docs:
     runs-on: ubuntu-latest
