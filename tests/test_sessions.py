@@ -134,11 +134,11 @@ def test_invalid_input_validation():
 def test_request_input_validation(monkeypatch, configuring_logger_for_tests):
     """Test validation of request method inputs."""
     session = Session()
-    
+
     # Test empty URL
     with pytest.raises(ValueError, match="URL cannot be empty"):
         session.get("")
-    
+
     # Test empty method - need to use request directly as the convenience methods
     # like get(), post() always provide a method
     with pytest.raises(ValueError, match="HTTP method cannot be empty"):
@@ -147,6 +147,7 @@ def test_request_input_validation(monkeypatch, configuring_logger_for_tests):
 
 def test_generic_request_exception(monkeypatch, configuring_logger_for_tests):
     """Test handling of general RequestException errors."""
+
     # Mock the request to raise a generic RequestException
     def mock_request(self, method, url, **kwargs):
         raise requests.exceptions.RequestException("Generic error")
@@ -160,7 +161,10 @@ def test_generic_request_exception(monkeypatch, configuring_logger_for_tests):
         session.get("https://example.com")
 
     # Check log entry was created
-    assert "Request to https://example.com failed: Generic error" in configuring_logger_for_tests.getvalue()
+    assert (
+        "Request to https://example.com failed: Generic error"
+        in configuring_logger_for_tests.getvalue()
+    )
 
 
 def test_session_retry_limit_exceeded(http_server, configuring_logger_for_tests):

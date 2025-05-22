@@ -21,7 +21,9 @@ def test_exceptions_init():
 
     # Test with original exception
     original = ValueError("Original error")
-    base_exc_with_original = RequestsEnhancedError("With original", original_exception=original)
+    base_exc_with_original = RequestsEnhancedError(
+        "With original", original_exception=original
+    )
     assert base_exc_with_original.original_exception is original
 
 
@@ -33,7 +35,9 @@ def test_retry_error():
 
     # With original exception
     original = ValueError("Original")
-    error_with_original = RequestRetryError("With original", original_exception=original)
+    error_with_original = RequestRetryError(
+        "With original", original_exception=original
+    )
     assert error_with_original.original_exception is original
 
 
@@ -45,7 +49,9 @@ def test_timeout_error():
 
     # With original exception
     original = ValueError("Original")
-    error_with_original = RequestTimeoutError("With original", original_exception=original)
+    error_with_original = RequestTimeoutError(
+        "With original", original_exception=original
+    )
     assert error_with_original.original_exception is original
 
 
@@ -56,7 +62,7 @@ def test_max_retries_exceeded_error():
     error = MaxRetriesExceededError("Max retries exceeded", original_exception=original)
     assert str(error) == "Max retries exceeded"
     assert error.original_exception is original
-    
+
     # Test without original exception
     error_without_original = MaxRetriesExceededError("No original")
     assert error_without_original.original_exception is None
