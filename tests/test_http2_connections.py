@@ -4,10 +4,22 @@ Tests for HTTP/2 connection classes in the adapters module.
 
 import pytest
 from unittest.mock import patch, Mock
+import sys
 
 # Import the necessary modules
 from requests_enhanced.adapters import HTTP2Adapter, HTTP2_AVAILABLE
-from urllib3.poolmanager import PoolManager
+
+# Skip all tests in this module if HTTP/2 is not available
+pytestmark = pytest.mark.skipif(
+    not HTTP2_AVAILABLE,
+    reason="HTTP/2 dependencies not available (h2, hyperframe, hpack)"
+)
+
+# Import optional urllib3 components with fallback
+try:
+    from urllib3.poolmanager import PoolManager
+except ImportError:
+    PoolManager = None
 
 
 @pytest.fixture
