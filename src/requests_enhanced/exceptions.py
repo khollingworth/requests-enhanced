@@ -2,7 +2,7 @@
 Custom exceptions for the requests-enhanced library.
 """
 
-from typing import Optional, Any
+from typing import Optional
 
 
 class RequestsEnhancedError(Exception):

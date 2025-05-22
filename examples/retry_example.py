@@ -1,6 +1,7 @@
 """
 Advanced retry and timeout handling examples for requests-enhanced library.
 """
+
 from typing import Dict, Any
 import logging
 import requests
@@ -17,7 +18,7 @@ def configure_logging() -> None:
     configure_logger(
         logger,
         level=logging.DEBUG,
-        log_format="%(asctime)s - %(levelname)s - %(message)s"
+        log_format="%(asctime)s - %(levelname)s - %(message)s",
     )
 
 
@@ -28,12 +29,12 @@ def custom_retry_example() -> None:
         total=3,  # Total number of retries
         backoff_factor=0.5,  # Backoff factor between retries
         status_forcelist=[500, 502, 503, 504],  # Status codes to retry on
-        allowed_methods=["GET", "POST"]  # HTTP methods to retry
+        allowed_methods=["GET", "POST"],  # HTTP methods to retry
     )
-    
+
     # Create session with custom retry configuration
     session = Session(retry_config=retry_config)
-    
+
     try:
         # This endpoint will return 503 Service Unavailable
         response = session.get("https://httpbin.org/status/503")
@@ -47,7 +48,7 @@ def timeout_example() -> Dict[str, Any]:
     """Example of handling timeouts with requests-enhanced."""
     # Set custom timeout (connect_timeout, read_timeout)
     session = Session(timeout=(1.5, 3))
-    
+
     try:
         # This endpoint simulates a 10-second delay
         response = session.get("https://httpbin.org/delay/10")
@@ -66,10 +67,10 @@ def timeout_example() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Setup logging
     configure_logging()
-    
+
     print("Custom Retry Example:")
     custom_retry_example()
-    
+
     print("\nTimeout Example:")
     result = timeout_example()
     print(f"Result: {result}")

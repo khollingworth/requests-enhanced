@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2025-05-22
+
+### Added
+- Added test coverage for 100% code coverage
+- Added tests for exception handling edge cases
+- Added tests for session validation logic
+
+### Changed
+- Improved code formatting with flake8 and black
+- Removed unused imports to reduce overhead
+- Fixed line length issues for better readability
+
 ## [0.1.5] - 2025-05-21
 
 ### Changed

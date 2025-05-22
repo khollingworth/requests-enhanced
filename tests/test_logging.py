@@ -4,7 +4,6 @@ Tests for the logging functionality.
 
 import logging
 import io
-import pytest
 
 from requests_enhanced.logging import (
     configure_logger,

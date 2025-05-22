@@ -2,7 +2,7 @@
 Utility functions for simplifying common HTTP request patterns.
 """
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 from .sessions import Session
 

@@ -4,7 +4,7 @@ Tests for the utility functions.
 
 import pytest
 import requests
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from requests_enhanced.utils import json_get, json_post
 from requests_enhanced.exceptions import RequestTimeoutError

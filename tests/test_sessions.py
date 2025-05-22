@@ -7,11 +7,7 @@ import requests
 from requests.adapters import Retry
 
 from requests_enhanced import Session
-from requests_enhanced.exceptions import (
-    RequestTimeoutError,
-    RequestRetryError,
-    MaxRetriesExceededError,
-)
+from requests_enhanced.exceptions import RequestTimeoutError, RequestRetryError
 
 
 def test_session_init_defaults():
@@ -123,6 +119,48 @@ def test_session_retry_error(monkeypatch, configuring_logger_for_tests):
         "Max retries exceeded for request to https://example.com"
         in configuring_logger_for_tests.getvalue()
     )
+
+
+def test_invalid_input_validation():
+    """Test validation of input parameters."""
+    # Test invalid max_retries value
+    with pytest.raises(ValueError, match="max_retries must be at least 1"):
+        Session(max_retries=0)
+
+    with pytest.raises(ValueError, match="max_retries must be at least 1"):
+        Session(max_retries=-1)
+
+
+def test_request_input_validation(monkeypatch, configuring_logger_for_tests):
+    """Test validation of request method inputs."""
+    session = Session()
+    
+    # Test empty URL
+    with pytest.raises(ValueError, match="URL cannot be empty"):
+        session.get("")
+    
+    # Test empty method - need to use request directly as the convenience methods
+    # like get(), post() always provide a method
+    with pytest.raises(ValueError, match="HTTP method cannot be empty"):
+        session.request("", "https://example.com")
+
+
+def test_generic_request_exception(monkeypatch, configuring_logger_for_tests):
+    """Test handling of general RequestException errors."""
+    # Mock the request to raise a generic RequestException
+    def mock_request(self, method, url, **kwargs):
+        raise requests.exceptions.RequestException("Generic error")
+
+    monkeypatch.setattr(requests.Session, "request", mock_request)
+
+    session = Session()
+
+    # Should re-raise the original exception
+    with pytest.raises(requests.exceptions.RequestException) as excinfo:
+        session.get("https://example.com")
+
+    # Check log entry was created
+    assert "Request to https://example.com failed: Generic error" in configuring_logger_for_tests.getvalue()
 
 
 def test_session_retry_limit_exceeded(http_server, configuring_logger_for_tests):

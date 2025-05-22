@@ -36,9 +36,10 @@ def configure_logger(
     Args:
         logger: The logger to configure
         level: Logging level (e.g., logging.INFO, logging.DEBUG)
-        handler: Optional handler to add to the logger. If None, a StreamHandler will be created.
-        log_format: Format string for log messages. If None and handler has no formatter,
-                   DEFAULT_LOG_FORMAT will be used.
+        handler: Optional handler to add to the logger. If None, a StreamHandler will be
+            created.
+        log_format: Format string for log messages. If None and handler has no
+                   formatter, DEFAULT_LOG_FORMAT will be used.
 
     Returns:
         The configured logger
@@ -60,7 +61,7 @@ def configure_logger(
         # If no formatter exists on handler and no log_format provided, use default
         formatter = RequestsEnhancedFormatter()
         handler.setFormatter(formatter)
-    # If handler already has a formatter and no log_format is specified, keep existing formatter
+    # If handler already has a formatter and no log_format is specified, keep it
 
     # Add handler to logger if not already added
     if handler not in logger.handlers:

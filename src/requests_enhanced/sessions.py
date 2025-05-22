@@ -11,7 +11,7 @@ Typical usage example:
 """
 
 import logging
-from typing import Optional, Tuple, Union, Any, Dict, cast
+from typing import Optional, Tuple, Union, Any
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -32,7 +32,8 @@ class Session(requests.Session):
     - Enhanced error handling with specific exception types
 
     Attributes:
-        timeout: Default timeout value used for all requests when not explicitly provided
+        timeout: Default timeout value used for all requests when not explicitly
+            provided
     """
 
     def __init__(
@@ -45,11 +46,11 @@ class Session(requests.Session):
         Initialize a new Session with retry and timeout configuration.
 
         Args:
-            retry_config: Custom Retry configuration. If None, a default will be created.
-            timeout: Default timeout as (connect_timeout, read_timeout) tuple or single float.
-                Recommended to use a tuple for more precise control.
-            max_retries: Number of retries for requests (used only if retry_config is None).
-                Must be a positive integer.
+            retry_config: Custom Retry config. If None, a default will be created.
+            timeout: Default timeout as (connect_timeout, read_timeout) tuple
+                or float value. Tuple recommended for precise control.
+            max_retries: Number of retries for requests (used only if retry_config
+                is None). Must be a positive integer.
 
         Raises:
             ValueError: If max_retries is less than 1
@@ -83,7 +84,9 @@ class Session(requests.Session):
             f"Created Session with timeout={timeout}, retry_config={retry_config}"
         )
 
-    def request(self, method: str, url: str, **kwargs: Any) -> requests.Response:  # type: ignore[override]
+    def request(
+        self, method: str, url: str, **kwargs: Any
+    ) -> requests.Response:  # type: ignore
         """
         Send a request with enhanced error handling for timeouts and retries.
 

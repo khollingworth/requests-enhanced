@@ -105,7 +105,7 @@ pip install -e ".[dev]"
 pytest
 
 # Run with coverage report
-pytest --cov=src/requests_plus --cov-report=term-missing
+pytest --cov=src/requests_enhanced --cov-report=term-missing
 
 # Run specific test file
 pytest tests/test_sessions.py

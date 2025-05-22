@@ -1,10 +1,10 @@
-# Requests Plus
+# Requests Enhanced
 
-Welcome to the documentation for Requests Plus, a Python wrapper library for the popular requests library.
+Welcome to the documentation for Requests Enhanced, a Python wrapper library for the popular requests library.
 
 ## Overview
 
-Requests Plus extends the functionality of the requests library with additional features such as:
+Requests Enhanced extends the functionality of the requests library with additional features such as:
 
 - Automatic retries with configurable backoff
 - Enhanced timeout handling
@@ -19,5 +19,5 @@ Requests Plus extends the functionality of the requests library with additional 
 ## Installation
 
 ```bash
-pip install requests-plus
+pip install requests-enhanced
 ```

@@ -1,11 +1,11 @@
 # Detailed Usage Guide
 
-This guide covers advanced usage patterns for the Requests Plus library.
+This guide covers advanced usage patterns for the Requests Enhanced library.
 
 ## Configuring Retries
 
 ```python
-from requests_plus import Session
+from requests_enhanced import Session
 from requests.adapters import Retry
 
 # Custom retry configuration
@@ -24,7 +24,7 @@ response = session.get("https://api.example.com/resources")
 ## Timeout Configuration
 
 ```python
-from requests_plus import Session
+from requests_enhanced import Session
 
 # Set custom timeout (connect_timeout, read_timeout)
 session = Session(timeout=(3.05, 27))
@@ -39,8 +39,8 @@ response = session.get("https://api.example.com/slow-resource", timeout=(5, 60))
 ## Error Handling
 
 ```python
-from requests_plus import Session
-from requests_plus.exceptions import RequestTimeoutError, RequestRetryError
+from requests_enhanced import Session
+from requests_enhanced.exceptions import RequestTimeoutError, RequestRetryError
 
 try:
     session = Session()
@@ -58,10 +58,10 @@ except RequestRetryError as e:
 
 ```python
 import logging
-from requests_plus.logging import configure_logger
+from requests_enhanced.logging import configure_logger
 
-# Get the requests_plus logger
-logger = logging.getLogger("requests_plus")
+# Get the requests_enhanced logger
+logger = logging.getLogger("requests_enhanced")
 
 # Configure with custom format and level
 configure_logger(logger, level=logging.DEBUG, log_format="%(asctime)s - %(levelname)s - %(message)s")
