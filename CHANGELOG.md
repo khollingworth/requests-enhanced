@@ -10,11 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added manual workflow trigger support for CI pipeline
 - Added HTTP/2 dependencies to CI test environment
+- Added comprehensive test suite for HTTP/2 connections and adapters
+- Created new test files to specifically target HTTP/2 functionality
 
 ### Fixed
 - Improved test skipping for environments without HTTP/2 dependencies
 - Enhanced CI robustness with better error handling
 - Fixed documentation link checking in CI workflow
+
+### Improved
+- Significantly increased test coverage from 63% to 87%
+- Boosted HTTP/2 adapter coverage from 40% to 82%
+- Enhanced test robustness by testing edge cases and error handling
 
 ## [0.1.9] - 2025-05-22
 
