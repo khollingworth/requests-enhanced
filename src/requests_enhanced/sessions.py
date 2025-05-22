@@ -11,18 +11,21 @@ Typical usage example:
 """
 
 import logging
-from typing import Optional, Tuple, Union, Any
+from typing import Any, Literal, Optional, Tuple, Union
 
 import requests
-from requests.adapters import HTTPAdapter, Retry
+from requests import Session as RequestsSession
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
+from .adapters import HTTP2Adapter
 from .exceptions import RequestRetryError, RequestTimeoutError
 
 # Configure module logger
 logger = logging.getLogger("requests_enhanced")
 
 
-class Session(requests.Session):
+class Session(RequestsSession):
     """
     Enhanced requests Session with automatic retry and timeout handling.
 
@@ -41,6 +44,7 @@ class Session(requests.Session):
         retry_config: Optional[Retry] = None,
         timeout: Union[float, Tuple[float, float]] = (3.05, 30),
         max_retries: int = 3,
+        http_version: Literal["1.1", "2"] = "1.1",
     ) -> None:
         """
         Initialize a new Session with retry and timeout configuration.
@@ -59,10 +63,16 @@ class Session(requests.Session):
         if max_retries < 1:
             raise ValueError("max_retries must be at least 1")
 
+        if http_version not in ["1.1", "2"]:
+            raise ValueError("http_version must be either '1.1' or '2'")
+
         super().__init__()
 
         # Set default timeout
         self.timeout = timeout
+
+        # Store HTTP version for reference
+        self.http_version = http_version
 
         # Configure retries
         if retry_config is None:
@@ -75,13 +85,37 @@ class Session(requests.Session):
                 allowed_methods=["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
             )
 
-        # Mount the retry adapter to both http and https protocols
-        adapter = HTTPAdapter(max_retries=retry_config)
-        self.mount("http://", adapter)
-        self.mount("https://", adapter)
+        # Create and mount the appropriate adapter based on HTTP version
+        if http_version == "2":
+            try:
+                logger.debug("Using HTTP/2 adapter for enhanced performance")
+                http2_adapter = HTTP2Adapter(
+                    max_retries=retry_config, protocol_version="h2"
+                )
+                # Only mount for HTTPS as HTTP/2 requires TLS
+                self.mount("https://", http2_adapter)
+                # Use standard adapter for HTTP connections
+                standard_adapter = HTTPAdapter(max_retries=retry_config)
+                self.mount("http://", standard_adapter)
+            except ImportError as e:
+                logger.warning(
+                    "HTTP/2 requested but dependencies not available. "
+                    "Falling back to HTTP/1.1. %s",
+                    str(e),
+                )
+                # Fall back to HTTP/1.1
+                http1_adapter = HTTPAdapter(max_retries=retry_config)
+                self.mount("http://", http1_adapter)
+                self.mount("https://", http1_adapter)
+        else:
+            # Standard HTTP/1.1 adapter
+            http1_adapter = HTTPAdapter(max_retries=retry_config)
+            self.mount("http://", http1_adapter)
+            self.mount("https://", http1_adapter)
 
         logger.debug(
-            f"Created Session with timeout={timeout}, retry_config={retry_config}"
+            f"Created Session with timeout={timeout}, retry_config={retry_config}, "
+            f"http_version={http_version}"
         )
 
     # The signature is intentionally simplified from the parent class
@@ -128,12 +162,18 @@ class Session(requests.Session):
 
         try:
             # Delegate to the parent class to make the actual request
-            return super().request(method, url, **kwargs)
+            response = super().request(method, url, **kwargs)
+            return response
         except requests.exceptions.Timeout as e:
             # Handle timeout exceptions with our custom error type
-            logger.error(
-                f"Request to {url} timed out after {kwargs.get('timeout')} seconds"
-            )
+            timeout_val = kwargs.get("timeout", self.timeout)
+            logger.error(f"Request to {url} timed out after {timeout_val} seconds")
+
+            if "response" in locals() and response is None:
+                timeout_value = kwargs.get("timeout", self.timeout)
+                raise RequestTimeoutError(
+                    f"Request to {url} timed out after {timeout_value} seconds"
+                )
             raise RequestTimeoutError(
                 f"Request to {url} timed out", original_exception=e
             )

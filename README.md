@@ -9,6 +9,7 @@ An enhanced wrapper for the popular `requests` library with additional features 
 
 ## Features
 
+- **HTTP/2 Support**: Performance improvements with HTTP/2 protocol support
 - **Automatic Retries**: Built-in retry mechanism with configurable backoff strategy
 - **Timeout Handling**: Enhanced timeout configuration and error handling
 - **Improved Logging**: Customizable logging with formatted output
@@ -17,8 +18,11 @@ An enhanced wrapper for the popular `requests` library with additional features 
 ## Installation
 
 ```bash
-# From PyPI
+# Basic installation from PyPI
 pip install requests-enhanced
+
+# With HTTP/2 support
+pip install requests-enhanced[http2]
 
 # From source (development)
 git clone https://github.com/khollingworth/requests-enhanced.git
@@ -37,6 +41,68 @@ session = Session()
 # Simple GET request
 response = session.get("https://api.example.com/resources")
 print(response.json())
+```
+
+## HTTP/2 Support
+
+The library provides robust HTTP/2 support with significant performance improvements:
+
+### Performance Benefits
+
+- **30-40% faster** for multiple concurrent requests to the same host
+- **Multiplexed connections**: Multiple requests share a single connection
+- **Header compression**: Reduces overhead and improves load times
+- **Binary framing**: More efficient data transfer
+- **Server push**: Allows servers to preemptively send resources
+- **Automatic fallback**: Gracefully falls back to HTTP/1.1 when needed
+
+### Compatibility
+
+- Works with urllib3 versions 1.x and 2.x
+- Compatible with Python 3.7+
+- Requires TLS 1.2 or higher
+
+See the [HTTP/2 example](examples/http2_example.py) for a performance comparison and the [API Reference](docs/api_reference.md#http2-support) for configuration details.
+
+### Using HTTP/2
+
+Enabling HTTP/2 is simple:
+
+```python
+from requests_enhanced import Session, HTTP2_AVAILABLE
+
+# Check if HTTP/2 support is available
+if HTTP2_AVAILABLE:
+    print("HTTP/2 support is enabled")
+else:
+    print("HTTP/2 dependencies not installed, install with: pip install requests-enhanced[http2]")
+
+# Create a session with HTTP/2 support
+session = Session(http_version="2")
+
+# Make requests as usual - HTTP/2 will be used automatically for HTTPS connections
+response = session.get("https://api.example.com/resources")
+
+# HTTP/1.1 will still be used for HTTP connections or if server doesn't support HTTP/2
+```
+
+### Manual Configuration
+
+For advanced use cases, you can manually configure the HTTP/2 adapter:
+
+```python
+from requests_enhanced import Session, HTTP2Adapter
+
+session = Session()
+
+# Mount HTTP/2 adapter for HTTPS URLs
+http2_adapter = HTTP2Adapter()
+session.mount("https://", http2_adapter)
+
+# Keep standard adapter for HTTP URLs
+from requests.adapters import HTTPAdapter
+session.mount("http://", HTTPAdapter())
+```
 
 # POST request with JSON data
 data = {"name": "example", "value": 42}

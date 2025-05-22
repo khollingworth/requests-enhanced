@@ -2,8 +2,6 @@
 Tests for the custom exceptions functionality.
 """
 
-import pytest
-
 from requests_enhanced.exceptions import (
     RequestsEnhancedError,
     RequestRetryError,

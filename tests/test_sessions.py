@@ -157,7 +157,7 @@ def test_generic_request_exception(monkeypatch, configuring_logger_for_tests):
     session = Session()
 
     # Should re-raise the original exception
-    with pytest.raises(requests.exceptions.RequestException) as excinfo:
+    with pytest.raises(requests.exceptions.RequestException):
         session.get("https://example.com")
 
     # Check log entry was created
