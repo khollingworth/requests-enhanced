@@ -84,9 +84,11 @@ class Session(requests.Session):
             f"Created Session with timeout={timeout}, retry_config={retry_config}"
         )
 
-    def request(
+    # The signature is intentionally simplified from the parent class
+    # while maintaining compatibility with how it's used in our codebase
+    def request(  # type: ignore[override]
         self, method: str, url: str, **kwargs: Any
-    ) -> requests.Response:  # type: ignore
+    ) -> requests.Response:
         """
         Send a request with enhanced error handling for timeouts and retries.
 

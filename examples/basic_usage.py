@@ -6,7 +6,7 @@ from requests_enhanced import Session
 from requests_enhanced.utils import json_get, json_post
 
 
-def session_example():
+def session_example() -> None:
     """Example of using the Session class for HTTP requests."""
     # Create a session with default retry and timeout settings
     session = Session()
@@ -23,7 +23,7 @@ def session_example():
     print(f"POST Response Content: {response.json()}")
 
 
-def utility_example():
+def utility_example() -> None:
     """Example of using utility functions for simpler requests."""
     # GET request with automatic JSON handling
     get_data = json_get("https://httpbin.org/get?param=value")
