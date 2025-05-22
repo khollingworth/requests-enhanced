@@ -12,5 +12,5 @@ This library extends the requests package with features such as:
 from .sessions import Session
 from .adapters import HTTP2Adapter, HTTP2_AVAILABLE
 
-__version__ = "0.1.9"
+__version__ = "0.1.10"
 __all__ = ["Session", "HTTP2Adapter", "HTTP2_AVAILABLE"]
