@@ -79,7 +79,9 @@ def test_http2_connection_connect_http2():
         if HTTP2_AVAILABLE:
             # Make sure the method exists before asserting it was called
             if hasattr(mock_context, "set_alpn_protocols"):
-                mock_context.set_alpn_protocols.assert_called_once_with(["h2", "http/1.1"])
+                mock_context.set_alpn_protocols.assert_called_once_with(
+                    ["h2", "http/1.1"]
+                )
             else:
                 # If the method doesn't exist (depends on OpenSSL version), this is expected behavior
                 pass
