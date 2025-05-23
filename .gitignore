@@ -58,3 +58,9 @@ venv/
 .idea/
 *.swp
 *.swo
+
+# Private planning documents
+docs/oauth-integration-plan.md
+docs/oauth-ci-requirements.md
+*-plan.md
+*-planning.md
