@@ -135,7 +135,7 @@ def api_with_custom_headers():
     # Add custom headers
     session.headers.update(
         {
-            "User-Agent": "requests-enhanced/0.1.12",
+            "User-Agent": "requests-enhanced/1.0.0",
             "Accept": "application/json",
             "X-Custom-Header": "CustomValue",
         }

@@ -35,7 +35,7 @@ except ImportError:
     OAuth2EnhancedSession: Optional[Type[Any]] = None  # type: ignore
     OAuthNotAvailableError: Optional[Type[Any]] = None  # type: ignore
 
-__version__ = "0.2.0"
+__version__ = "1.0.0"
 __all__ = [
     "Session",
     "HTTP2Adapter",

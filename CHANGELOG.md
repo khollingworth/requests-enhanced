@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-05-23
+
+### Added
+- **Major Version Release** with complete OAuth integration
+- Comprehensive documentation updates in README.md and docs/
+- Improved example coverage with extensive OAuth examples
+- Full HTTP/1.1, HTTP/2, and HTTP/3 protocol support with OAuth
+
+### Changed
+- Upgraded all documentation to reflect v1.0.0 status
+- Refined error handling with more descriptive messages
+- Enhanced CI/CD pipeline for v1.0.0 release
+
+### Fixed
+- All test failures related to OAuth integration
+- HTTP/3 adapter connection issues in test suite
+- Documentation inconsistencies and outdated references
+
 ## [0.2.0] - 2025-05-23
 
 ### Added
