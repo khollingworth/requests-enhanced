@@ -2,6 +2,13 @@
 
 ## Current Tasks (2025-05-23)
 
+- [ ] **NEW: Enhance CI workflow coverage reporting** (2025-05-23)
+  - Update CI workflow to install all optional dependencies (`pip install -e ".[all]"`) 
+  - Ensure consistent coverage measurement between local and CI environments
+  - Add coverage pragmas to conditionally executed code for better reporting
+  - Improve documentation around coverage measurement and dependencies
+  - Target: Accurate coverage reporting that reflects actual code quality
+
 - [x] **COMPLETED: Version 1.0.1 Release and Badge Updates** (2025-05-23)
   - Released v1.0.1 to PyPI with OAuth integration
   - Fixed badge display to show correct version

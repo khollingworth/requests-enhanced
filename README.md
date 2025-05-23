@@ -5,6 +5,8 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/requests-enhanced.svg)](https://pypi.org/project/requests-enhanced/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+> **Note on Test Coverage**: Codecov reports show ~52% coverage which reflects baseline installation without optional dependencies. Local development testing with all dependencies (`pip install -e .[all]`) achieves ~76% coverage, with OAuth module at 88% and core components at 100%.
+
 An enhanced wrapper for the popular `requests` library with advanced features for performance, authentication, and reliability in Python HTTP requests.
 
 ## Features
