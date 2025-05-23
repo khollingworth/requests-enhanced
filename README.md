@@ -1,7 +1,7 @@
 # Requests Enhanced
 
 [![CI](https://github.com/khollingworth/requests-enhanced/actions/workflows/ci.yml/badge.svg)](https://github.com/khollingworth/requests-enhanced/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/pypi/v/requests-enhanced.svg?v=1.0.0&style=flat)](https://pypi.org/project/requests-enhanced/)
+[![PyPI version](https://img.shields.io/pypi/v/requests-enhanced.svg?v=1.0.1&style=flat)](https://pypi.org/project/requests-enhanced/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/requests-enhanced.svg)](https://pypi.org/project/requests-enhanced/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 

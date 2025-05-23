@@ -1,4 +1,4 @@
-# OAuth Integration Summary - requests-enhanced v1.0.0
+# OAuth Integration Summary - requests-enhanced v1.0.1
 
 ## Overview
 
@@ -73,7 +73,7 @@ OAuth sessions inherit ALL enhanced session capabilities:
 - `src/requests_enhanced/__init__.py` - Added OAuth exports
 - `setup.cfg` - Added OAuth dependencies and description
 - `README.md` - Updated features and documentation links
-- `CHANGELOG.md` - Comprehensive v1.0.0 changelog
+- `CHANGELOG.md` - Comprehensive v1.0.1 changelog
 - `TASK.md` - Updated task tracking
 
 ## Quality Metrics
@@ -98,10 +98,10 @@ OAuth Module Coverage: 95%
 
 ## Version Information
 
-- **Previous Version**: 0.2.0
-- **New Version**: 1.0.0 (major version release)
+- **Previous Version**: 1.0.0
+- **New Version**: 1.0.1 (patch version release)
 - **Release Date**: May 23, 2025
-- **Git Tag**: v1.0.0
+- **Git Tag**: v1.0.1
 - **Commit**: 0490bbf
 
 ## Installation & Usage
@@ -151,7 +151,7 @@ user_data = response.json()
 ## Next Steps
 
 1. **CI/CD Pipeline**: Automated testing and deployment
-2. **PyPI Release**: Publish v1.0.0 to PyPI
+2. **PyPI Release**: Publish v1.0.1 to PyPI
 3. **Documentation**: Update online documentation
 4. **Community**: Announce OAuth support to users
 5. **Monitoring**: Track adoption and feedback
