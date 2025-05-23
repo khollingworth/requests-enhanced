@@ -10,6 +10,7 @@ An enhanced wrapper for the popular `requests` library with additional features 
 ## Features
 
 - **HTTP/2 Support**: Performance improvements with HTTP/2 protocol support
+- **HTTP/3 Support**: Cutting-edge HTTP/3 protocol support for enhanced performance
 - **Automatic Retries**: Built-in retry mechanism with configurable backoff strategy
 - **Timeout Handling**: Enhanced timeout configuration and error handling
 - **Improved Logging**: Customizable logging with formatted output
@@ -23,6 +24,9 @@ pip install requests-enhanced
 
 # With HTTP/2 support
 pip install requests-enhanced[http2]
+
+# With HTTP/3 support
+pip install requests-enhanced[http3]
 
 # From source (development)
 git clone https://github.com/khollingworth/requests-enhanced.git
