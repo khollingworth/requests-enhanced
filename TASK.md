@@ -2,6 +2,14 @@
 
 ## Current Tasks (2025-05-23)
 
+- [x] **COMPLETED: Version 1.0.1 Release and Badge Updates** (2025-05-23)
+  - Released v1.0.1 to PyPI with OAuth integration
+  - Fixed badge display to show correct version
+  - Updated documentation to consistently refer to v1.0.1
+  - Updated User-Agent strings in examples
+  - Updated CHANGELOG.md with patch release information
+  - Successfully published to PyPI using Trusted Publisher (OIDC)
+
 - [x] **COMPLETED: OAuth Integration Development** (2025-05-23)
   - Created OAuth1EnhancedSession and OAuth2EnhancedSession classes
   - Implemented full OAuth 1.0/1.1 and OAuth 2.0 authentication support
@@ -12,7 +20,7 @@
   - Achieved 88% test coverage for OAuth module, exceeding 75% target
   - All code quality checks passing: Black, mypy, flake8
   - Security audit completed with no CVEs found
-  - Ready for release v1.0.0 with OAuth integration
+  - Major version release v1.0.0 with OAuth integration
 
 - [x] Consolidate documentation and improve structure (2025-05-23)
   - Combined quickstart.md and usage.md into comprehensive usage_guide.md
