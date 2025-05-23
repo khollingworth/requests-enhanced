@@ -97,9 +97,11 @@ jobs:
     needs: [lint, test, docs]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    environment: pypi  # Simplified environment configuration
     permissions:
-      id-token: write
+      id-token: write  # Required for OIDC authentication
       contents: read
+      attestations: write  # Required for generating attestations
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -114,23 +116,19 @@ jobs:
       run: |
         python -m build
         twine check dist/*
-    - name: Check PyPI token
-      id: check_token
-      # This safely checks if the token exists without causing an error
-      env:
-        # This will be an empty string if the secret doesn't exist
-        PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-        if [ -n "$PYPI_TOKEN" ]; then
-          echo "token_exists=true" >> $GITHUB_OUTPUT
-        else
-          echo "token_exists=false" >> $GITHUB_OUTPUT
-          echo "::warning::No PyPI API token found in repository secrets. Publishing will be skipped."
-        fi
-
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@release/v1
-      if: steps.check_token.outputs.token_exists == 'true'
+    
+    # Generate attestations for the built packages
+    - name: Generate attestations
+      uses: actions/attest-build-provenance@v1
       with:
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        subject-path: 'dist/*'
+
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        # Explicitly set password to empty to force Trusted Publisher usage
+        password: ""
+        repository-url: "https://upload.pypi.org/legacy/"
+        print-hash: true  # Show package hashes for security
         skip-existing: true
+        attestations: true  # Include attestations with the upload
