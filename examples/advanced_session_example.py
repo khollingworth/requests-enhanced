@@ -20,12 +20,17 @@ def connection_pooling_example():
     """Example: Configure connection pooling for better performance."""
     print("=== Connection Pooling Example ===")
 
-    # Create session with custom pool configuration
+    # Create session with retry configuration
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=3)
+
+    # Create session with standard parameters
     session = Session(
-        pool_connections=20,  # Number of connection pools to cache
-        pool_maxsize=50,  # Maximum number of connections to save in the pool
-        max_retries=3,
+        retry_config=retry, max_retries=3, timeout=(3.05, 30), http_version="1.1"
     )
+
+    print("Note: Connection pooling is handled internally by requests")
 
     # Make multiple requests to demonstrate connection reuse
     urls = [
@@ -83,7 +88,7 @@ def multi_protocol_session_example():
 
     # Mount different adapters for different protocols
     http2_adapter = HTTP2Adapter()
-    session.mount("https://http2.pro", http2_adapter)
+    session.mount("https://www.google.com", http2_adapter)
 
     if HTTP3_AVAILABLE:
         http3_adapter = HTTP3Adapter()
@@ -95,7 +100,7 @@ def multi_protocol_session_example():
     # Test different endpoints
     test_endpoints = [
         ("https://httpbin.org/get", "Standard HTTPS"),
-        ("https://http2.pro/api/v1", "HTTP/2 endpoint"),
+        ("https://www.google.com", "HTTP/2 endpoint"),
     ]
 
     for url, description in test_endpoints:
@@ -140,14 +145,17 @@ def session_cookie_management_example():
 
 
 def session_persistence_example():
-    """Example: Persist session configuration across requests."""
+    """Example: Persist and restore session state."""
     print("\n=== Session Persistence Example ===")
 
-    # Create a base session with common configuration
-    base_session = Session(
-        max_retries=3,
-        timeout=10,
-        headers={
+    # Create a session with custom settings
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=2)
+
+    session = Session(retry_config=retry, timeout=(3.05, 30))
+    session.headers.update(
+        {
             "User-Agent": "MyApp/1.0",
             "Accept": "application/json",
             "X-API-Version": "2.0",
@@ -155,12 +163,11 @@ def session_persistence_example():
     )
 
     # Add authentication
-    base_session.auth = ("username", "password")  # Basic auth example
+    session.auth = ("username", "password")  # Basic auth example
 
     print("Base session configuration:")
-    print(f"  Max retries: {base_session.max_retries}")
-    print(f"  Timeout: {base_session.timeout}")
-    print(f"  Headers: {dict(base_session.headers)}")
+    print(f"  Timeout: {session.timeout}")
+    print(f"  Headers: {dict(session.headers)}")
 
     # Use the session for multiple API endpoints
     endpoints = ["/user", "/posts", "/comments"]
@@ -169,7 +176,7 @@ def session_persistence_example():
     for endpoint in endpoints:
         try:
             # Using httpbin to echo our request details
-            response = base_session.get(f"https://httpbin.org{endpoint}")
+            response = session.get(f"https://httpbin.org{endpoint}")
             print(f"  {endpoint}: {response.status_code}")
         except Exception as e:
             print(f"  {endpoint}: Error - {e}")
@@ -198,7 +205,10 @@ def performance_monitoring_example():
     """Example: Monitor session performance and connection reuse."""
     print("\n=== Performance Monitoring Example ===")
 
-    session = Session(pool_connections=10, pool_maxsize=20, max_retries=1)
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=1)
+    session = Session(retry_config=retry, timeout=(3.05, 30))
 
     # Add timing to requests
     def time_request(session, url):

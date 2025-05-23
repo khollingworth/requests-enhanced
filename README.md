@@ -5,17 +5,25 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/requests-enhanced.svg)](https://pypi.org/project/requests-enhanced/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-An enhanced wrapper for the popular `requests` library with additional features for improved reliability and convenience in Python HTTP requests.
+An enhanced wrapper for the popular `requests` library with advanced features for performance, authentication, and reliability in Python HTTP requests.
 
 ## Features
 
-- **HTTP/2 Support**: Performance improvements with HTTP/2 protocol support
-- **HTTP/3 Support**: Cutting-edge HTTP/3 protocol support for enhanced performance
-- **OAuth Authentication**: Built-in OAuth 1.0/1.1 and OAuth 2.0 support
-- **Automatic Retries**: Built-in retry mechanism with configurable backoff strategy
-- **Timeout Handling**: Enhanced timeout configuration and error handling
-- **Improved Logging**: Customizable logging with formatted output
-- **Utility Functions**: Simplified JSON request handling
+- **OAuth Authentication**: Full OAuth 1.0/1.1 and OAuth 2.0 support
+  - Compatible with Twitter, GitHub, Google, Facebook and other OAuth providers
+  - Thread-safe token management with automatic refresh
+  - Seamless integration with HTTP/2 and HTTP/3
+
+- **Modern Protocol Support**:
+  - **HTTP/2**: Up to 40% faster than HTTP/1.1 for multiple requests
+  - **HTTP/3**: QUIC protocol support with reduced latency
+  - **Automatic Fallback**: Gracefully degrades HTTP/3 → HTTP/2 → HTTP/1.1
+
+- **Reliability & Performance**:
+  - **Configurable Retries**: Built-in retry mechanism with exponential backoff
+  - **Enhanced Timeouts**: Fine-grained connect and read timeout control
+  - **Improved Logging**: Detailed request and connection tracking
+  - **Utility Functions**: Simplified JSON API operations
 
 ## Installation
 
@@ -32,10 +40,10 @@ pip install requests-enhanced[http3]
 # With OAuth support
 pip install requests-enhanced[oauth]
 
-# All features
-pip install requests-enhanced[http2,http3,oauth]
+# With all features
+pip install requests-enhanced[all]  # Includes HTTP/2, HTTP/3, and OAuth
 
-# From source (development)
+# For development
 git clone https://github.com/khollingworth/requests-enhanced.git
 cd requests-enhanced
 pip install -e ".[dev]"
@@ -43,11 +51,19 @@ pip install -e ".[dev]"
 
 ## Quick Start
 
+### Basic Usage
+
 ```python
 from requests_enhanced import Session
 
 # Create a session with default retry and timeout settings
 session = Session()
+
+# Use HTTP/2 protocol
+http2_session = Session(http_version="2")
+
+# Use HTTP/3 with automatic fallback
+http3_session = Session(http_version="3")
 
 # Simple GET request
 response = session.get("https://api.example.com/resources")
@@ -147,6 +163,44 @@ data = json_get("https://api.example.com/resources")
 
 # POST request with automatic JSON handling
 result = json_post("https://api.example.com/resources", data={"name": "example"})
+```
+
+### OAuth Authentication
+
+```python
+from requests_enhanced import OAuth1EnhancedSession, OAuth2EnhancedSession
+
+# OAuth 1.0/1.1 example (Twitter-style)
+oauth1_session = OAuth1EnhancedSession(
+    client_key="your_consumer_key",
+    client_secret="your_consumer_secret",
+    resource_owner_key="user_token",
+    resource_owner_secret="user_secret",
+    http_version="2"  # Use HTTP/2
+)
+response = oauth1_session.get("https://api.twitter.com/1.1/account/verify_credentials.json")
+
+# OAuth 2.0 example (GitHub-style)
+oauth2_session = OAuth2EnhancedSession(
+    client_id="your_client_id",
+    http_version="3"  # Use HTTP/3 with automatic fallback
+)
+
+# Generate authorization URL for user to visit
+auth_url, state = oauth2_session.authorization_url(
+    "https://github.com/login/oauth/authorize",
+    scope=["user", "repo"]
+)
+
+# After user authorization, exchange code for token
+token = oauth2_session.fetch_token(
+    "https://github.com/login/oauth/access_token",
+    client_secret="your_client_secret",
+    authorization_response="https://example.com/callback?code=auth_code"
+)
+
+# Make authenticated requests
+response = oauth2_session.get("https://api.github.com/user")
 ```
 
 ## Error Handling

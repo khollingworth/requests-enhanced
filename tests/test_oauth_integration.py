@@ -140,6 +140,8 @@ class TestOAuth1EnhancedSession:
         """Test fetching OAuth 1.0 access token."""
         # Setup mock
         mock_instance = Mock()
+        # Configure token as a dictionary to support item assignment
+        mock_instance.token = {}
         mock_instance.fetch_access_token.return_value = {
             "oauth_token": "access_token",
             "oauth_token_secret": "access_secret",

@@ -395,7 +395,7 @@ if OAUTH_AVAILABLE:
 
         def authorization_url(
             self, authorization_url: str, state: Optional[str] = None, **kwargs: Any
-        ) -> Tuple[str, str]:
+        ) -> Tuple[str, Optional[str]]:
             """
             Generate an authorization URL.
 

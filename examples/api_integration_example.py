@@ -17,7 +17,10 @@ def github_api_example():
     print("=== GitHub API Example ===")
 
     # Create a session with automatic retries
-    session = Session(max_retries=3, retry_backoff_factor=0.5)
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=3, backoff_factor=0.5)
+    session = Session(retry_config=retry, timeout=(3.05, 30))
 
     # Optional: Add authentication if you have a token
     github_token = os.getenv("GITHUB_TOKEN")
@@ -80,11 +83,14 @@ def rest_api_crud_example():
 
     # Using JSONPlaceholder as a test API
     base_url = "https://jsonplaceholder.typicode.com"
-    session = Session(
-        max_retries=3,
-        timeout=10,
-        retry_on=[500, 502, 503, 504],  # Retry on server errors
+    from urllib3.util.retry import Retry
+
+    retry = Retry(
+        total=3,
+        backoff_factor=0.5,
+        status_forcelist=[500, 502, 503, 504],  # Retry on server errors
     )
+    session = Session(retry_config=retry, timeout=10)
 
     # CREATE - Post a new resource
     new_post = {
@@ -152,7 +158,10 @@ def error_handling_example():
     """Example: Comprehensive error handling."""
     print("\n=== Error Handling Example ===")
 
-    session = Session(max_retries=2, timeout=5, retry_backoff_factor=1.0)
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=2, backoff_factor=1.0)
+    session = Session(retry_config=retry, timeout=5)
 
     # Test different error scenarios
     test_urls = [
