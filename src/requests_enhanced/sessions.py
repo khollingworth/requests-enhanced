@@ -18,7 +18,7 @@ from requests import Session as RequestsSession
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-from .adapters import HTTP2Adapter
+from .adapters import HTTP2Adapter, HTTP3Adapter, HTTP2_AVAILABLE, HTTP3_AVAILABLE
 from .exceptions import RequestRetryError, RequestTimeoutError
 
 # Configure module logger
@@ -44,7 +44,7 @@ class Session(RequestsSession):
         retry_config: Optional[Retry] = None,
         timeout: Union[float, Tuple[float, float]] = (3.05, 30),
         max_retries: int = 3,
-        http_version: Literal["1.1", "2"] = "1.1",
+        http_version: Literal["1.1", "2", "3"] = "1.1",
     ) -> None:
         """
         Initialize a new Session with retry and timeout configuration.
@@ -63,8 +63,8 @@ class Session(RequestsSession):
         if max_retries < 1:
             raise ValueError("max_retries must be at least 1")
 
-        if http_version not in ["1.1", "2"]:
-            raise ValueError("http_version must be either '1.1' or '2'")
+        if http_version not in ["1.1", "2", "3"]:
+            raise ValueError("http_version must be either '1.1', '2', or '3'")
 
         super().__init__()
 
@@ -85,37 +85,76 @@ class Session(RequestsSession):
                 allowed_methods=["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
             )
 
-        # Create and mount the appropriate adapter based on HTTP version
-        if http_version == "2":
-            try:
-                logger.debug("Using HTTP/2 adapter for enhanced performance")
-                http2_adapter = HTTP2Adapter(
-                    max_retries=retry_config, protocol_version="h2"
-                )
-                # Only mount for HTTPS as HTTP/2 requires TLS
-                self.mount("https://", http2_adapter)
-                # Use standard adapter for HTTP connections
-                standard_adapter = HTTPAdapter(max_retries=retry_config)
-                self.mount("http://", standard_adapter)
-            except ImportError as e:
-                logger.warning(
-                    "HTTP/2 requested but dependencies not available. "
-                    "Falling back to HTTP/1.1. %s",
-                    str(e),
-                )
-                # Fall back to HTTP/1.1
-                http1_adapter = HTTPAdapter(max_retries=retry_config)
-                self.mount("http://", http1_adapter)
-                self.mount("https://", http1_adapter)
-        else:
-            # Standard HTTP/1.1 adapter
-            http1_adapter = HTTPAdapter(max_retries=retry_config)
-            self.mount("http://", http1_adapter)
-            self.mount("https://", http1_adapter)
+        self.setup_adapter(http_version, retry_config)
 
         logger.debug(
             f"Created Session with timeout={timeout}, retry_config={retry_config}, "
             f"http_version={http_version}"
+        )
+
+    def setup_adapter(self, http_version: str, retry_config: Retry) -> None:
+        """Set up the appropriate adapter based on the requested HTTP version.
+
+        Args:
+            http_version: HTTP version to use ('1', '2', or '3')
+            retry_config: Retry configuration to use
+        """
+        # Create a variable with Union type to handle different adapter types
+        adapter: Union[HTTP3Adapter, HTTP2Adapter, HTTPAdapter]
+
+        # Determine which adapter to use based on HTTP version
+        if http_version == "3":
+            # Try HTTP/3 adapter
+            if HTTP3_AVAILABLE:
+                # Use HTTP/3 adapter with automatic fallback
+                adapter = HTTP3Adapter(protocol_version="h3", max_retries=retry_config)
+                logger.debug("Using HTTP/3 adapter with fallback capability")
+            elif HTTP2_AVAILABLE:
+                # Fall back to HTTP/2 if HTTP/3 dependencies aren't available
+                adapter = HTTP2Adapter(protocol_version="h2", max_retries=retry_config)
+                logger.warning(
+                    "HTTP/3 requested but dependencies not available. "
+                    "Falling back to HTTP/2. Install HTTP/3 with: "
+                    "pip install requests-enhanced[http3]"
+                )
+            else:
+                # Final fallback to HTTP/1.1
+                adapter = HTTPAdapter(max_retries=retry_config)
+                logger.warning(
+                    "HTTP/3 and HTTP/2 dependencies not available. "
+                    "Using HTTP/1.1 instead. Install with: "
+                    "pip install requests-enhanced[http3] or "
+                    "pip install requests-enhanced[http2]"
+                )
+        elif http_version == "2":
+            # Try HTTP/2 adapter
+            if HTTP2_AVAILABLE:
+                # Use HTTP/2 adapter for HTTPS requests
+                adapter = HTTP2Adapter(protocol_version="h2", max_retries=retry_config)
+                logger.debug("Using HTTP/2 adapter for HTTPS connections")
+            else:
+                # Fall back to HTTP/1.1
+                adapter = HTTPAdapter(max_retries=retry_config)
+                logger.warning(
+                    "HTTP/2 requested but dependencies not available. "
+                    "Using HTTP/1.1 instead. Install with: "
+                    "pip install requests-enhanced[http2]"
+                )
+        else:
+            # Standard HTTP/1.1 adapter
+            adapter = HTTPAdapter(max_retries=retry_config)
+            logger.debug("Using standard HTTP/1.1 adapter")
+
+        # Mount the appropriate adapter for HTTPS URLs (potentially HTTP/2 or HTTP/3)
+        self.mount("https://", adapter)
+
+        # Use standard adapter for HTTP connections (HTTP/1.1 only)
+        standard_adapter = HTTPAdapter(max_retries=retry_config)
+        self.mount("http://", standard_adapter)
+
+        logger.debug(
+            f"Created Session with timeout={self.timeout}, "
+            f"retry_config={retry_config}, http_version={http_version}"
         )
 
     # The signature is intentionally simplified from the parent class
