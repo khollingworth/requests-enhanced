@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.15] - 2025-05-23
+
+### Fixed
+- Fixed HTTP2Connection protocol parameter handling to properly store the "h2" protocol when specified
+- Improved ALPN protocol setting logic in HTTP2Connection.connect() method to properly check for context availability
+- Resolved CI test failures in test_http2_connection_init and test_http2_connection_connect_http2
+
 ## [0.1.14] - 2025-05-23
 
 ### Added

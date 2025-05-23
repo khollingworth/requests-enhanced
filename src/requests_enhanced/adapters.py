@@ -207,8 +207,8 @@ class HTTP2Connection(HTTPSConnection):
     """A connection class that supports HTTP/2 protocol negotiation."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Remove parameters that might not be supported in this version
-        self._protocol = kwargs.pop("protocol", "http/1.1")
+        # Extract and store the protocol parameter
+        self._protocol = kwargs.pop("protocol", "https")
 
         # Handle parameters that might be specific to certain urllib3 versions
         if "request_context" in kwargs:
@@ -230,17 +230,15 @@ class HTTP2Connection(HTTPSConnection):
                 and self.sock is not None
                 and HTTP2_AVAILABLE
             ):
-                # Socket level protocol negotiation requires ssl
-                context = self.sock.context
-
                 # Get the socket's context if possible
                 if hasattr(self.sock, "context"):
                     context = self.sock.context
 
                     # Set ALPN protocols if possible
                     try:
-                        context.set_alpn_protocols(["h2", "http/1.1"])
-                        logger.debug("Set ALPN protocols on connection")
+                        if hasattr(context, "set_alpn_protocols"):
+                            context.set_alpn_protocols(["h2", "http/1.1"])
+                            logger.debug("Set ALPN protocols on connection")
                     except (AttributeError, NotImplementedError) as e:
                         logger.debug(f"ALPN protocol setting not supported: {e}")
 
