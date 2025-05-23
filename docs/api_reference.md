@@ -17,7 +17,7 @@ Session(
     retry_config: Optional[Retry] = None,
     timeout: Union[float, Tuple[float, float]] = (3.05, 30),
     max_retries: int = 3,
-    http_version: Literal["1.1", "2"] = "1.1"
+    http_version: Literal["1.1", "2", "3"] = "1.1"
 )
 ```
 
@@ -26,7 +26,10 @@ Session(
 - `retry_config`: Custom `requests.adapters.Retry` configuration. If `None`, a default will be created.
 - `timeout`: Default timeout as `(connect_timeout, read_timeout)` tuple or single float.
 - `max_retries`: Number of retries for requests (used only if `retry_config` is `None`).
-- `http_version`: HTTP protocol version to use. Set to `"2"` to enable HTTP/2 support for improved performance, or `"1.1"` for standard HTTP/1.1 (default).
+- `http_version`: HTTP protocol version to use. Options:
+  - `"1.1"`: Standard HTTP/1.1 (default)
+  - `"2"`: HTTP/2 for improved performance
+  - `"3"`: HTTP/3 for maximum performance with automatic fallback to HTTP/2 and HTTP/1.1 if not available
 
 #### Methods
 
@@ -54,6 +57,10 @@ response = session.get("https://api.example.com/resources")
 # HTTP/2 enabled session for improved performance
 session_http2 = Session(timeout=(5, 30), max_retries=5, http_version="2")
 response = session_http2.get("https://api.example.com/resources")
+
+# HTTP/3 enabled session with automatic fallback to HTTP/2 and HTTP/1.1
+session_http3 = Session(timeout=(5, 30), max_retries=5, http_version="3")
+response = session_http3.get("https://api.example.com/resources")
 ```
 
 ### HTTP/2 Support
@@ -220,6 +227,98 @@ HTTP/2 provides significant performance improvements, especially for multiple re
 - **Binary Protocol**: More efficient parsing
 
 > **Note:** For most use cases, it's simpler to use `Session(http_version="2")` which automatically configures the appropriate adapters.
+
+### HTTP/3 Support
+
+```python
+from requests_enhanced import HTTP3Adapter, HTTP3_AVAILABLE
+```
+
+The library provides HTTP/3 protocol support through the `HTTP3Adapter` class and the `HTTP3_AVAILABLE` flag. HTTP/3 uses QUIC (Quick UDP Internet Connections) transport protocol which can provide reduced latency and better performance, especially on high-latency or lossy connections.
+
+#### HTTP3_AVAILABLE
+
+A boolean flag indicating whether HTTP/3 dependencies are installed and available.
+
+```python
+if HTTP3_AVAILABLE:
+    print("HTTP/3 support is available")
+else:
+    print("HTTP/3 dependencies not installed. Install with: pip install requests-enhanced[http3]")
+```
+
+#### HTTP3Adapter
+
+```python
+HTTP3Adapter(
+    pool_connections: int = 10,
+    pool_maxsize: int = 10,
+    max_retries: Union[Retry, int, None] = None,
+    pool_block: bool = False
+)
+```
+
+**Parameters:**
+
+- `pool_connections`: Number of connection pools to cache
+- `pool_maxsize`: Maximum number of connections to save in the pool
+- `max_retries`: Retry configuration to use
+- `pool_block`: Whether the connection pool should block for connections
+
+**Example:**
+
+```python
+# HTTP/3 Support with automatic fallback
+from requests_enhanced import Session, HTTP3Adapter, HTTP3_AVAILABLE
+
+# Check if HTTP/3 is available
+print(f"HTTP/3 support available: {HTTP3_AVAILABLE}")
+
+# Mount HTTP/3 adapter (with automatic fallback)
+session = Session()
+http3_adapter = HTTP3Adapter()
+session.mount("https://", http3_adapter)
+
+# Will use HTTP/3 if available, falling back to HTTP/2 and HTTP/1.1 if not
+response = session.get("https://example.com")
+```
+
+#### Automatic Fallback Mechanism
+
+The HTTP/3 adapter includes a robust fallback mechanism:
+
+1. First attempts to connect using HTTP/3 (QUIC)
+2. If HTTP/3 fails, falls back to HTTP/2
+3. If HTTP/2 fails, falls back to HTTP/1.1
+
+This ensures maximum compatibility while allowing your application to take advantage of the latest protocols when available.
+
+**Example with Session:**
+
+```python
+# Simplest way to use HTTP/3 with automatic fallback
+session = Session(http_version="3")
+response = session.get("https://example.com")
+
+# The protocol version used is available in the response
+print(f"Protocol used: {response.raw.version}")
+```
+
+#### Dependency Management
+
+HTTP/3 support requires additional dependencies. You can install them with:
+
+```bash
+pip install requests-enhanced[http3]
+```
+
+Or manually install the required packages:
+
+```bash
+pip install aioquic
+```
+
+> **Note:** For most use cases, it's simpler to use `Session(http_version="3")` which automatically configures the appropriate adapters and handles fallback logic.
 
 ### Utility Functions
 

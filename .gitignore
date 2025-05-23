@@ -1,8 +1,12 @@
 # Local task tracking
 TASK.md
+PLANNING.md
 
 # PyPI credentials - never commit!
 .pypirc
+
+# PyPI trusted publisher setup documentation
+docs/pypi-trusted-publisher-setup.md
 
 # Python cache files
 __pycache__/

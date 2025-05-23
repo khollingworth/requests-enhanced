@@ -5,6 +5,58 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.13] - 2025-05-23
+
+### Added
+- Implemented `get_connection_with_tls_context` method in HTTP3Adapter to replace deprecated `get_connection`
+- Added comprehensive type annotations to HTTP/3 implementation for better IDE support
+- Created consolidated `usage_guide.md` document for improved documentation structure
+
+### Changed
+- Updated API reference documentation to fully describe HTTP/3 support and fallback mechanisms
+- Restructured documentation to be more comprehensive and better organized
+- Added HTTP/3 protocol examples with automatic fallback demonstration
+
+### Fixed
+- Fixed all mypy type checking issues in HTTP/3 adapter implementation
+- Fixed linting issues and long lines in HTTP/3 adapter
+- Improved error handling in the HTTP/3 fallback mechanism
+
+## [0.1.12] - 2025-05-23
+
+### Added
+- Added PLANNING.md file documenting project architecture and conventions
+- Added PyPI Trusted Publisher setup documentation
+- Added attestations generation for package releases
+
+### Changed
+- Migrated CI/CD pipeline from token-based authentication to PyPI Trusted Publisher (OIDC)
+- Enhanced security with cryptographic attestations for published packages
+- Updated GitHub Actions workflow with required OIDC permissions
+
+### Fixed
+- Fixed all HTTP/3 test failures by handling fallback scenarios properly
+- Fixed test assertions to check HTTP3_AVAILABLE before expecting HTTP/3 behavior
+- Added appropriate test skips for HTTP/3-specific functionality
+
+## [0.1.11] - 2025-05-22
+
+### Added
+- Added HTTP/3 protocol support with automatic fallback capability
+- Added HTTP3Adapter for handling HTTP/3 connections with QUIC transport
+- Added HTTP3Connection and HTTP3ConnectionPool classes
+- Added detection for HTTP/3 dependencies via HTTP3_AVAILABLE flag
+- Added comprehensive test suite for HTTP/3 functionality with 80%+ coverage
+- Added HTTP/3 usage example with performance comparison
+- Added automatic protocol negotiation with fallback from HTTP/3 → HTTP/2 → HTTP/1.1
+- Added new `[http3]` and `[all]` extras for dependency installation
+
+### Changed
+- Enhanced Session class to support HTTP/3 via `http_version="3"` parameter
+- Improved adapter mounting with cleaner protocol fallback mechanism
+- Updated adapter initialization to handle errors more gracefully
+- Enhanced logging for protocol negotiation and fallback
+
 ## [0.1.10] - 2025-05-22
 
 ### Added
