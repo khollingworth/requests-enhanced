@@ -83,7 +83,8 @@ def test_http2_connection_connect_http2():
                     ["h2", "http/1.1"]
                 )
             else:
-                # If the method doesn't exist (depends on OpenSSL version), this is expected behavior
+                # If the method doesn't exist (depends on OpenSSL version),
+                # this is expected behavior, so we do nothing
                 pass
 
 

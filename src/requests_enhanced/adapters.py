@@ -216,7 +216,7 @@ class HTTP2Connection(HTTPSConnection):
 
         # Initialize the parent connection
         super().__init__(*args, **kwargs)
-        
+
         # Set the protocol after parent initialization to ensure it's not overridden
         self._protocol = protocol
 
