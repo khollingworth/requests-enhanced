@@ -141,7 +141,7 @@ def test_http3_adapter_send_special_error_handling():
     # Test NewConnectionError handling
     with patch.object(adapter, "poolmanager") as mock_poolmanager:
         mock_pool = MagicMock()
-        # NewConnectionError takes 'pool' parameter, not 'conn'
+        # NewConnectionError takes 'pool' parameter
         mock_pool.urlopen.side_effect = NewConnectionError(
             pool=mock_pool, message="Failed to establish a new connection"
         )
