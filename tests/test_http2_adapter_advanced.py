@@ -23,13 +23,14 @@ try:
     )
 except ImportError:
     # Provide mock objects if imports fail
-    HTTP2Adapter = MagicMock
+    # Use type ignore comments to bypass mypy errors in test files
+    HTTP2Adapter = MagicMock  # type: ignore
     HTTP2_AVAILABLE = False
     URLLIB3_MAJOR = 1
     URLLIB3_MINOR = 0
-    PoolManager = MagicMock
-    HTTPConnectionPool = MagicMock
-    HTTPSConnectionPool = MagicMock
+    PoolManager = MagicMock  # type: ignore
+    HTTPConnectionPool = MagicMock  # type: ignore
+    HTTPSConnectionPool = MagicMock  # type: ignore
 
 # Skip HTTP/2 tests if dependencies are missing
 pytestmark = pytest.mark.skipif(

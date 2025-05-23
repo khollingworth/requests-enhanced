@@ -43,6 +43,18 @@ response = session.get("https://api.example.com/resources")
 print(response.json())
 ```
 
+## Documentation
+
+- **[Tutorial](docs/tutorial.md)**: Comprehensive guide covering all features
+- **[Quick Reference](docs/quick-reference.md)**: Concise cheat sheet for common patterns
+- **[Examples](examples/)**: Real-world code examples including:
+  - [Basic Usage](examples/basic_usage.py)
+  - [API Integration](examples/api_integration_example.py)
+  - [Advanced Sessions](examples/advanced_session_example.py)
+  - [HTTP/2 Example](examples/http2_example.py)
+  - [HTTP/3 Example](examples/http3_example.py)
+  - [Retry Patterns](examples/retry_example.py)
+
 ## HTTP/2 Support
 
 The library provides robust HTTP/2 support with significant performance improvements:
@@ -105,6 +117,7 @@ session.mount("http://", HTTPAdapter())
 ```
 
 # POST request with JSON data
+```python
 data = {"name": "example", "value": 42}
 response = session.post("https://api.example.com/resources", json=data)
 ```

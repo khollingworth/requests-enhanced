@@ -10,7 +10,8 @@ try:
     from requests_enhanced.adapters import HTTP2Adapter, HTTP2_AVAILABLE
 except ImportError:
     # Set fallback values if module cannot be imported
-    HTTP2Adapter = None
+    # Use type ignore comments to bypass mypy errors in test files
+    HTTP2Adapter = None  # type: ignore
     HTTP2_AVAILABLE = False
 
 # Skip all tests in this module if HTTP/2 is not available

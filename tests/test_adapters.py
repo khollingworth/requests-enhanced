@@ -10,7 +10,8 @@ try:
     from requests_enhanced.adapters import HTTP2Adapter, HTTP2_AVAILABLE
 except ImportError:
     # Provide mock objects if imports fail
-    HTTP2Adapter = MagicMock
+    # Use type ignore comments to bypass mypy errors in test files
+    HTTP2Adapter = MagicMock  # type: ignore
     HTTP2_AVAILABLE = False
 
 # Skip HTTP/2 tests if dependencies are missing
