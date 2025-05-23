@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.18] - 2025-05-23
+
+### Fixed
+- Updated PyPI badge to use shields.io for better reliability and caching
+- Fixed badge display issues in README
+
 ## [0.1.17] - 2025-05-23
 
 ### Changed
