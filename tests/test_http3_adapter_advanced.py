@@ -141,15 +141,15 @@ def test_http3_adapter_send_special_error_handling():
     # Test NewConnectionError handling
     with patch.object(adapter, "poolmanager") as mock_poolmanager:
         mock_pool = MagicMock()
-        # NewConnectionError takes 'conn' parameter, not 'pool'
+        # NewConnectionError takes 'pool' parameter, not 'conn'
         mock_pool.urlopen.side_effect = NewConnectionError(
-            conn=mock_pool, message="Failed to establish a new connection"
+            pool=mock_pool, message="Failed to establish a new connection"
         )
         mock_poolmanager.connection_from_url.return_value = mock_pool
 
         with patch("requests.adapters.HTTPAdapter.send") as mock_parent_send:
             mock_parent_send.side_effect = NewConnectionError(
-                conn=mock_pool, message="Failed to establish a new connection"
+                pool=mock_pool, message="Failed to establish a new connection"
             )
 
             with pytest.raises(NewConnectionError):

@@ -11,6 +11,7 @@ An enhanced wrapper for the popular `requests` library with additional features 
 
 - **HTTP/2 Support**: Performance improvements with HTTP/2 protocol support
 - **HTTP/3 Support**: Cutting-edge HTTP/3 protocol support for enhanced performance
+- **OAuth Authentication**: Built-in OAuth 1.0/1.1 and OAuth 2.0 support
 - **Automatic Retries**: Built-in retry mechanism with configurable backoff strategy
 - **Timeout Handling**: Enhanced timeout configuration and error handling
 - **Improved Logging**: Customizable logging with formatted output
@@ -27,6 +28,12 @@ pip install requests-enhanced[http2]
 
 # With HTTP/3 support
 pip install requests-enhanced[http3]
+
+# With OAuth support
+pip install requests-enhanced[oauth]
+
+# All features
+pip install requests-enhanced[http2,http3,oauth]
 
 # From source (development)
 git clone https://github.com/khollingworth/requests-enhanced.git
@@ -51,12 +58,14 @@ print(response.json())
 
 - **[Tutorial](docs/tutorial.md)**: Comprehensive guide covering all features
 - **[Quick Reference](docs/quick-reference.md)**: Concise cheat sheet for common patterns
+- **[OAuth Usage Guide](docs/oauth-usage-guide.md)**: Complete guide for OAuth 1.0/1.1 and OAuth 2.0
 - **[Examples](examples/)**: Real-world code examples including:
   - [Basic Usage](examples/basic_usage.py)
   - [API Integration](examples/api_integration_example.py)
   - [Advanced Sessions](examples/advanced_session_example.py)
   - [HTTP/2 Example](examples/http2_example.py)
   - [HTTP/3 Example](examples/http3_example.py)
+  - [OAuth Examples](examples/oauth_example.py)
   - [Retry Patterns](examples/retry_example.py)
 
 ## HTTP/2 Support

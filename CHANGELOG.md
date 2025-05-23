@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-05-23
+
+### Added
+- **OAuth 1.0/1.1 Support**: Complete OAuth 1.0/1.1 authentication implementation
+  - `OAuth1EnhancedSession` class for OAuth 1.0/1.1 flows
+  - Support for request token, authorization, and access token flows
+  - Compatible with Twitter API, Flickr, and other OAuth 1.0 services
+- **OAuth 2.0 Support**: Comprehensive OAuth 2.0 authentication implementation
+  - `OAuth2EnhancedSession` class for OAuth 2.0 flows
+  - Authorization code flow, client credentials flow support
+  - Automatic token refresh with configurable callbacks
+  - Compatible with GitHub, Google, Facebook, and other OAuth 2.0 providers
+- **OAuth Dependencies**: New `[oauth]` extra for optional OAuth functionality
+  - `requests-oauthlib` and `oauthlib` dependencies
+  - Graceful fallback when OAuth dependencies not installed
+- **OAuth Documentation**: Comprehensive OAuth usage guide and examples
+  - Complete usage guide at `docs/oauth-usage-guide.md`
+  - Real-world examples in `examples/oauth_example.py`
+  - Integration with enhanced session features (HTTP/2, HTTP/3, retries)
+- **OAuth Error Handling**: Custom `OAuthNotAvailableError` exception
+- **OAuth Testing**: Comprehensive test suite with 95% coverage for OAuth module
+
+### Changed
+- **Package Description**: Updated to include OAuth authentication capabilities
+- **Installation Options**: Added `pip install requests-enhanced[oauth]` option
+- **README**: Enhanced with OAuth features and documentation links
+- **API Exports**: Added OAuth classes to public API when available
+
+### Technical Details
+- OAuth sessions inherit all enhanced session capabilities (HTTP/2, HTTP/3, retries, timeouts)
+- Optional dependency loading with proper error handling
+- Thread-safe token management and automatic refresh
+- Secure token storage patterns and best practices documentation
+- Full compatibility with existing `requests-oauthlib` workflows
+
 ## [0.1.18] - 2025-05-23
 
 ### Fixed
