@@ -33,7 +33,9 @@ var/
 # Coverage reports
 .coverage
 .coverage.*
+.coverage*
 coverage.xml
+coverage*.xml
 htmlcov/
 .tox/
 .nox/
