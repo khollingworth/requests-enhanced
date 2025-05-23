@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.16] - 2025-05-23
+
+### Fixed
+- Fixed HTTP2Connection protocol parameter preservation by setting it after parent class initialization
+- Resolved issue where parent HTTPSConnection class was overriding the protocol attribute
+- Both test_http2_connection_init and test_http2_connection_connect_http2 now pass correctly
+- Ensured HTTP/2 protocol negotiation works as expected
+
 ## [0.1.15] - 2025-05-23
 
 ### Fixed

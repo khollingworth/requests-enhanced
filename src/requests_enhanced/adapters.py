@@ -207,8 +207,8 @@ class HTTP2Connection(HTTPSConnection):
     """A connection class that supports HTTP/2 protocol negotiation."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Extract and store the protocol parameter
-        self._protocol = kwargs.pop("protocol", "https")
+        # Extract and store the protocol parameter before parent init
+        protocol = kwargs.pop("protocol", "https")
 
         # Handle parameters that might be specific to certain urllib3 versions
         if "request_context" in kwargs:
@@ -216,6 +216,9 @@ class HTTP2Connection(HTTPSConnection):
 
         # Initialize the parent connection
         super().__init__(*args, **kwargs)
+        
+        # Set the protocol after parent initialization to ensure it's not overridden
+        self._protocol = protocol
 
     def connect(self) -> None:
         """Connect to the host and port specified in __init__."""

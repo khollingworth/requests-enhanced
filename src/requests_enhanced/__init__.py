@@ -13,7 +13,7 @@ This library extends the requests package with features such as:
 from .sessions import Session
 from .adapters import HTTP2Adapter, HTTP2_AVAILABLE, HTTP3Adapter, HTTP3_AVAILABLE
 
-__version__ = "0.1.15"
+__version__ = "0.1.16"
 __all__ = [
     "Session",
     "HTTP2Adapter",
