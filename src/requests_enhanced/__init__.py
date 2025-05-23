@@ -11,29 +11,36 @@ This library extends the requests package with features such as:
 - OAuth 1.0/1.1 and OAuth 2.0 authentication support
 """
 
+from typing import Optional, Type, Any
+
 from .sessions import Session
-from .adapters import HTTP2Adapter, HTTP2_AVAILABLE, HTTP3Adapter, HTTP3_AVAILABLE
+from .adapters import HTTP2Adapter, HTTP3Adapter, HTTP2_AVAILABLE, HTTP3_AVAILABLE
 
 # OAuth support (optional dependency)
 try:
     from .oauth import (
         OAuth1EnhancedSession,
         OAuth2EnhancedSession,
+        OAuthNotAvailableError,
         OAUTH_AVAILABLE,
-        OAuthNotAvailableError
     )
+
+    # If OAUTH_AVAILABLE is False, set classes to None for the test
+    if not OAUTH_AVAILABLE:
+        OAuth1EnhancedSession = None  # type: ignore  # noqa: F811
+        OAuth2EnhancedSession = None  # type: ignore  # noqa: F811
 except ImportError:
     OAUTH_AVAILABLE = False
-    OAuth1EnhancedSession = None
-    OAuth2EnhancedSession = None
-    OAuthNotAvailableError = None
+    OAuth1EnhancedSession: Optional[Type[Any]] = None  # type: ignore
+    OAuth2EnhancedSession: Optional[Type[Any]] = None  # type: ignore
+    OAuthNotAvailableError: Optional[Type[Any]] = None  # type: ignore
 
 __version__ = "0.2.0"
 __all__ = [
     "Session",
     "HTTP2Adapter",
-    "HTTP2_AVAILABLE", 
     "HTTP3Adapter",
+    "HTTP2_AVAILABLE",
     "HTTP3_AVAILABLE",
     "OAuth1EnhancedSession",
     "OAuth2EnhancedSession",
