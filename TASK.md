@@ -2,6 +2,13 @@
 
 ## Current Tasks (2025-05-23)
 
+- [ ] **NEW: OAuth Integration Development** (2025-05-23)
+  - Created feature/oauth-integration development branch
+  - Researched requests-oauthlib library capabilities and integration patterns
+  - Developed comprehensive OAuth integration plan (docs/oauth-integration-plan.md)
+  - Planning OAuth 1.0/1.1 and OAuth 2.0 support with HTTP/2 and HTTP/3 compatibility
+  - Target: Enhanced Session classes with OAuth authentication capabilities
+
 - [x] Consolidate documentation and improve structure (2025-05-23)
   - Combined quickstart.md and usage.md into comprehensive usage_guide.md
   - Updated API reference to include HTTP/3 adapter documentation
