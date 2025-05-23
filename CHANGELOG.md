@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.14] - 2025-05-23
+
+### Added
+- Added security vulnerability scanning to CI pipeline using the safety tool
+- Added comprehensive version constraints for all dependencies to prevent conflicts
+
+### Changed
+- Updated urllib3 dependency to constrain to versions <2.0.0 for better compatibility with boto/botocore
+- Improved dependency management with proper upper bounds for all requirements
+
+### Security
+- Added explicit version constraints to prevent dependency conflicts with common packages
+- Integrated automated security scanning to detect vulnerabilities before publishing
+
 ## [0.1.13] - 2025-05-23
 
 ### Added
